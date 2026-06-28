@@ -1,0 +1,156 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: #0a0a0a;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    font-family: Arial, sans-serif;
+}
+
+
+.avatar-wrapper {
+    display: inline-block;
+    border-radius: 50%;
+    padding: 6px;
+    background: linear-gradient(45deg, #ff0000, #ff8800, #ffff00, #00ff00, #0088ff, #8800ff, #ff0000);
+    background-size: 400% 400%;
+    animation: gradient-shift 4s ease infinite;
+    position: relative;
+    z-index: 2;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.ivan {
+    display: block;
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    object-fit: cover;
+    pointer-events: none;
+}
+
+@keyframes gradient-shift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+
+#flash {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: white;
+    opacity: 0;
+    pointer-events: none;
+    z-index: 999;
+    transition: opacity 0.1s;
+}
+
+#flash.active {
+    opacity: 0.8;
+    transition: opacity 0.05s;
+}
+
+
+.crack {
+    position: fixed;
+    background: #1a1a2e;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    z-index: 100;
+    pointer-events: none;
+    transform-origin: center;
+    box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.5);
+    animation: crack-fall 1.5s ease-in forwards;
+}
+
+@keyframes crack-fall {
+    0% {
+        opacity: 1;
+        transform: translate(0, 0) rotate(0deg) scale(1);
+    }
+    100% {
+        opacity: 0;
+        transform: translate(var(--tx), calc(var(--ty) + 200vh)) rotate(var(--rot)) scale(0.5);
+    }
+}
+
+@keyframes shake-hard {
+    0%, 100% {
+        transform: translate(0, 0) rotate(0deg) scale(1);
+    }
+    3% {
+        transform: translate(-60px, 30px) rotate(-3deg) scale(1.02);
+    }
+    6% {
+        transform: translate(60px, -40px) rotate(3deg) scale(0.98);
+    }
+    9% {
+        transform: translate(-55px, 45px) rotate(-4deg) scale(1.01);
+    }
+    12% {
+        transform: translate(55px, -50px) rotate(4deg) scale(0.99);
+    }
+    15% {
+        transform: translate(-50px, 40px) rotate(-3deg) scale(1.01);
+    }
+    18% {
+        transform: translate(50px, -35px) rotate(3deg) scale(0.99);
+    }
+    22% {
+        transform: translate(-45px, 45px) rotate(-2deg) scale(1);
+    }
+    26% {
+        transform: translate(45px, -40px) rotate(2deg) scale(1);
+    }
+    30% {
+        transform: translate(-40px, 35px) rotate(-1deg) scale(1);
+    }
+    35% {
+        transform: translate(40px, -30px) rotate(1deg) scale(1);
+    }
+    40% {
+        transform: translate(-35px, 30px) rotate(0deg) scale(1);
+    }
+    45% {
+        transform: translate(35px, -25px) rotate(0deg) scale(1);
+    }
+    50% {
+        transform: translate(-30px, 25px) rotate(0deg) scale(1);
+    }
+    55% {
+        transform: translate(30px, -20px) rotate(0deg) scale(1);
+    }
+    60% {
+        transform: translate(-25px, 20px) rotate(0deg) scale(1);
+    }
+    65% {
+        transform: translate(25px, -15px) rotate(0deg) scale(1);
+    }
+    70% {
+        transform: translate(-20px, 15px) rotate(0deg) scale(1);
+    }
+    80% {
+        transform: translate(15px, -10px) rotate(0deg) scale(1);
+    }
+    90% {
+        transform: translate(-10px, 10px) rotate(0deg) scale(1);
+    }
+    100% {
+        transform: translate(0, 0) rotate(0deg) scale(1);
+    }
+}
+
+body.shaking-hard {
+    animation: shake-hard 1s ease-in-out;
+}
