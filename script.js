@@ -1,10 +1,93 @@
 const avatar = document.querySelector('.avatar-wrapper');
 let isAnimating = false;
 
+let clickCount = 0;
+let record = parseInt(localStorage.getItem('clickRecord')) || 0;
+let clickHistory = [];
+let cps = 0;
+let lastClickTime = 0;
+
+const counterNumber = document.getElementById('counter-number');
+const recordNumber = document.getElementById('record-number');
+const cpsNumber = document.getElementById('cps-number');
+
+recordNumber.textContent = record;
+
+function updateCounter() {
+    counterNumber.textContent = clickCount;
+
+    counterNumber.classList.remove('pop');
+    void counterNumber.offsetWidth;
+    counterNumber.classList.add('pop');
+
+    updateCPS();
+
+}
+
+function showClickPopup(x, y) {
+    const popup = document.createElement('div');
+    popup.className = 'click-popup';
+    popup.textContent = '+1';
+
+    const colors = ['#ff6b6b', '#ffd93d', '#6bcb77', '#4d96ff', '#ff6bcb', '#ff9f43'];
+    popup.style.color = colors[Math.floor(Math.random() * colors.length)];
+
+    const tx = (Math.random() - 0.5) * 200;
+    const ty = -100 - Math.random() * 200;
+    popup.style.setProperty('--tx', tx + 'px');
+    popup.style.setProperty('--ty', ty + 'px');
+
+    popup.style.left = x + 'px';
+    popup.style.top = y + 'px';
+
+    document.body.appendChild(popup);
+    setTimeout(() => popup.remove(), 1000);
+}
+
+function showRecordNotification() {
+    const notif = document.createElement('div');
+    notif.className = 'record-notification';
+    notif.textContent = '🏆 НОВЫЙ РЕКОРД! 🏆';
+    document.body.appendChild(notif);
+
+    setTimeout(() => {
+        notif.classList.add('hide');
+        setTimeout(() => notif.remove(), 500);
+    }, 1500);
+}
+
+function updateCPS() {
+    const now = Date.now();
+    clickHistory.push(now);
+    clickHistory = clickHistory.filter(time => now - time < 1000);
+    cps = clickHistory.length;
+    cpsNumber.textContent = cps;
+}
+
 avatar.addEventListener('click', function(e) {
+
+    clickCount++;
+    updateCounter();
+
+    const rect = this.getBoundingClientRect();
+    const x = e.clientX || rect.left + rect.width/2;
+    const y = e.clientY || rect.top;
+    showClickPopup(x, y);
+
     if (isAnimating) return;
     isAnimating = true;
     startEpicEffect();
+});
+
+document.getElementById('reset-counter-btn').addEventListener('click', function(e) {
+    e.stopPropagation();
+    if (confirm('Точно сбросить счётчик? 🥺')) {
+        clickCount = 0;
+        clickHistory = [];
+        cps = 0;
+        cpsNumber.textContent = '0';
+        counterNumber.textContent = '0';
+    }
 });
 
 function startEpicEffect() {
